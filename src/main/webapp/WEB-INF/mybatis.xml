@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+   <typeAliases>
+         <!-- 별명을 붙여서 간략하게 쓰기 가능  -->
+         <typeAlias type="com.test.petwogether.AdoptListDTO" alias="AdoptListDTO" />
+         <typeAlias type="com.test.petwogether.MPetDTO" alias="MPetDTO" />
+         <typeAlias type="com.test.petwogether.PetDTO" alias="PetDTO" />
+         <typeAlias type="com.test.petwogether.PPetDTO" alias="PPetDTO" />
+         
+         <typeAlias type="com.test.petwogether.admin.AdminDTO" alias="AdminDTO" />
+         <typeAlias type="com.test.petwogether.admin.AnswerDTO" alias="AnswerDTO" />
+         <typeAlias type="com.test.petwogether.admin.HealthDTO" alias="HealthDTO" />
+         <typeAlias type="com.test.petwogether.admin.SpecialDTO" alias="SpecialDTO" />
+         
+         <typeAlias type="com.test.petwogether.member.AdoptReviewDTO" alias="AdoptReviewDTO" />
+         <typeAlias type="com.test.petwogether.member.CareServiceDTO" alias="CareServiceDTO" />
+         <typeAlias type="com.test.petwogether.member.HealthCommentDTO" alias="HealthCommentDTO" />
+         <typeAlias type="com.test.petwogether.member.MemberDTO" alias="MemberDTO" />
+         <typeAlias type="com.test.petwogether.member.PSReviewDTO" alias="PSReviewDTO" />
+         <typeAlias type="com.test.petwogether.member.QuestionDTO" alias="QuestionDTO" />
+         <typeAlias type="com.test.petwogether.member.ServiceDTO" alias="ServiceDTO" />
+         <typeAlias type="com.test.petwogether.member.StrayDTO" alias="StrayDTO" />
+      
+         <typeAlias type="com.test.petwogether.petsitter.DiaryDTO" alias="DiaryDTO" />
+         <typeAlias type="com.test.petwogether.petsitter.PetSitterDTO" alias="PetSitterDTO" />
+         <typeAlias type="com.test.petwogether.petsitter.RDateDTO" alias="RDateDTO" />
+         <typeAlias type="com.test.petwogether.petsitter.RegisterDTO" alias="RegisterDTO" />
+      
+      
+   </typeAliases>
+
+</configuration>
+
+

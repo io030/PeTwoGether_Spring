@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- Mapper 파일 -->
+<mapper namespace="petsitter">
+
+	<select id="auth" parameterType="PetSitterDTO"
+		resultType="PetSitterDTO">
+		select * from tblPetSitter where psid=#{psid} and pspw=#{pspw}
+	</select>
+
+	<!-- 지현 부분 START -->
+
+	<select id="list" resultType="PetSitterDTO">
+		select * from tblPetSitter
+	</select>
+
+	<select id="info" parameterType="String"
+		resultType="PetSitterDTO">
+		select * from tblPetSitter where psseq = #{psseq}
+	</select>
+
+	<select id="rinfo" parameterType="String"
+		resultType="RegisterDTO">
+		select rtitle, rcontent from tblRegister r left join
+		tblPetSitter ps on r.psseq = ps.psseq where ps.psseq = #{psseq}
+	</select>
+
+	<select id="pspet" parameterType="String" resultType="PetDTO">
+		select
+		ps.psseq as psseq, page, pname, pgender, pfile from tblPet p
+		inner join tblPPet pp on p.pseq = pp.pseq
+		left join tblPetSitter ps on pp.psseq = ps.psseq
+		where ps.psseq = #{psseq}
+	</select>
+
+	<select id="rdlist" parameterType="String" resultType="RDateDTO">
+		select
+		rddate, rdstate, ps.psseq as psseq from tblRDate rd
+		left join tblRegister rs on rd.rseq = rs.rseq
+		left join tblPetSitter ps on rs.psseq = ps.psseq
+		where ps.psseq = #{psseq}
+	</select>
+
+	<update id="setrdate" parameterType="RDateDTO">
+		update tblRDate set rdstate = '이용불가능' where rddate = #{rddate} and rseq =
+		#{rseq}
+	</update>
+
+
+	<!-- 지현 부분 END -->
+
+	<!-- 유찬 부분 시작 -->
+	<insert id="regpetsitter" parameterType="RegisterDTO">
+
+		insert into tblRegister values (seqRegister.nextVal, #{psseq}, #{rtitle},
+		#{rcontent}, #{rfile})
+
+	</insert>
+
+
+	<insert id="addrdate" parameterType="RDateDTO">
+		insert into tblRDate values(seqRDate.nextVal, #{rseq}, #{rddate}, default)
+	</insert>
+
+	<!-- 유찬 부분 끝 -->
+	
+	<!-- 영우 부분 시작  -->
+	
+	   <!-- 영우 -->
+   <select id="ppet" parameterType="String" resultType="PetDTO">
+      select * from tblPpet pp inner join tblPet p on pp.pseq = p.pseq where psseq = #{psseq} and p.state = 'y'
+   </select>
+   
+   <select id="pcare" parameterType="String" resultType="CareServiceDTO">
+      select * from vwCspet5 where psseq = #{psseq} order by csstart desc
+   </select>
+   
+   <insert id="petaddnf" parameterType="PetDTO">
+      insert into tblPet (pseq, pname, page, pgender, ptype, pbreed, psize, state) values (seqPet.nextVal, #{pname}, #{page}, #{pgender}, #{ptype}, #{pbreed}, #{psize}, 'y')
+   </insert>
+   
+   <insert id="petadd" parameterType="PetDTO">
+      insert into tblPet values (seqPet.nextVal, #{pname}, #{page}, #{pgender}, #{ptype}, #{pbreed}, #{psize}, #{pfile}, 'y')
+   </insert>
+   
+   <insert id="pspetadd" parameterType="String">
+      insert into tblPPet values (seqPPet.nextVal, (select max(pseq) from tblPet), #{psseq})
+   </insert>
+   
+   <update id="petedit" parameterType="PetDTO">
+      update tblPet set pname=#{pname}, page=#{page}, pgender=#{pgender}, ptype=#{ptype}, pbreed=#{pbreed}, psize=#{psize}, pfile=#{pfile, jdbcType=VARCHAR} where pseq = #{pseq}
+   </update>
+   
+   <update id="petdel" parameterType="String">
+      update tblPet set state = 'n' where pseq=#{pseq}
+   </update>
+   
+   <select id="diary" parameterType="DiaryDTO" resultType="DiaryDTO">
+      select * from tblDiary where csseq = #{csseq}
+   </select>
+   
+   <delete id="pdiarydel" parameterType="String">
+      delete from tblCareService where csseq = #{csseq}
+   </delete>
+   
+   <update id="poutpetsitter" parameterType="String">
+      update tblPetsitter set pslevel = '4' where psseq=#{psseq}
+   </update>
+   
+   <insert id="diaryaddne" parameterType="DiaryDTO">
+      insert into tblDiary (dseq, csseq, dtime, dmeal) values (seqDiary.nextVal, #{csseq}, #{dtime}, #{dmeal})
+   </insert>
+   
+
+   <insert id="diaryadd" parameterType="DiaryDTO">
+      insert into tblDiary (dseq, csseq, dtime, dmeal, detc) values (seqDiary.nextVal, #{csseq}, #{dtime}, #{dmeal}, #{detc})
+   </insert>
+   
+	<!-- 영우 부분 끝  -->
+
+</mapper>

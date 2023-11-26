@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- Mapper 파일 -->
+<mapper namespace="member">
+	<!-- 설화 부분 START -->
+
+	<select id="auth" parameterType="MemberDTO"
+		resultType="MemberDTO">
+		select * from tblMember where mid=#{mid} and mpw=#{mpw}
+	</select>
+
+	<!-- 설 -->
+	<select id="mpet" parameterType="String" resultType="PetDTO">
+		select * from tblMpet mp inner join tblPet p on mp.pseq = p.pseq where mseq
+		= #{mseq} and p.state = 'y'
+	</select>
+
+	<!-- 설 -->
+	<insert id="petaddnf" parameterType="PetDTO">
+		insert into tblPet (pseq, pname, page, pgender, ptype, pbreed, psize, state)
+		values (seqPet.nextVal, #{pname}, #{page}, #{pgender}, #{ptype},
+		#{pbreed}, #{psize}, 'y')
+	</insert>
+
+	<!-- 설 -->
+   <insert id="petadd" parameterType="PetDTO">
+      insert into tblPet values (seqPet.nextVal, #{pname}, #{page}, #{pgender},
+      #{ptype}, #{pbreed}, #{psize}, #{pfile}, 'y')
+   </insert>
+	
+	
+
+	<!-- 설 -->
+	<insert id="mpetadd" parameterType="String">
+		insert into tblMPet values (seqMPet.nextVal, (select max(pseq) from tblPet),
+		#{mseq})
+	</insert>
+
+	<!-- 설 -->
+	<update id="petedit" parameterType="PetDTO">
+		update tblPet set pname=#{pname}, page=#{page}, pgender=#{pgender},
+		ptype=#{ptype}, pbreed=#{pbreed}, psize=#{psize}, pfile=#{pfile,
+		jdbcType=VARCHAR} where pseq = #{pseq}
+	</update>
+
+	<!-- 설 -->
+	<update id="petdel" parameterType="String">
+		update tblPet set state = 'n' where pseq=#{pseq}
+	</update>
+
+	<!-- 설 -->
+	<select id="gmdiary" parameterType="DiaryDTO"
+		resultType="DiaryDTO">
+		select * from tblDiary where csseq = #{csseq}
+	</select>
+
+	<!-- 설 -->
+	<select id="mcare" parameterType="String"
+		resultType="CareServiceDTO">
+		select * from vwCspet3 where mseq = #{mseq}
+	</select>
+
+	<!-- 설 -->
+	<delete id="mdiarydel" parameterType="String">
+		delete from tblCareService where csseq = #{csseq}
+	</delete>
+
+	<!-- 설 -->
+	<select id="mstray" parameterType="String" resultType="StrayDTO">
+		select * from tblStray where mseq = #{mseq}
+	</select>
+
+	<!-- 설 -->
+	<delete id="mstraydel" parameterType="String">
+		delete from tblStray where sseq = #{sseq}
+	</delete>
+
+	<!-- 설 -->
+	<update id="moutmember" parameterType="String">
+		update tblMember set mlevel = '4' where mseq=#{mseq}
+	</update>
+
+	<!-- 설화 부분 END -->
+
+	<!-- 지현START -->
+
+	<select id="mpetlist" parameterType="Integer"
+		resultType="PetDTO">
+		select m.mseq as mseq, p.pseq as pseq, pname, pgender, pfile from tblPet p
+		inner join tblMPet mp on p.pseq = mp.pseq
+		left join tblMember m on mp.mseq = m.mseq where m.mseq = #{memberseq}
+	</select>
+
+	<insert id="setcs" parameterType="CareServiceDTO">
+		insert into tblCareService (csseq, mseq, mpseq1, mpseq2, mpseq3, rseq,
+		sseq,csstart, csend)
+		values (${csseq}, ${mseq}, ${mpseq1}, ${mpseq2}, ${mpseq3}, ${rseq},
+		${sseq}, #{csstart}, #{csend})
+	</insert>
+
+	<select id="getcsseq" resultType="Integer">
+		select max(csseq) from tblCareService
+	</select>
+
+
+	<!-- 지현END -->
+
+	<!-- 동균 부분 START -->
+	<select id="getPSReviewList" resultType="PSReviewDTO">
+		select * from
+		tblPSReview order by psrseq desc
+	</select>
+
+	<select id="getMemberId" resultType="String"
+		parameterType="String">
+		select Mid from tblmember where mseq = #{mseq}
+	</select>
+
+	<select id="getPSReview" resultType="PSReviewDTO"
+		parameterType="String">
+		select * from tblPSReview where psrseq = ${psrseq}
+	</select>
+
+	<select id="getRService" resultType="CareServiceDTO"
+		parameterType="String">
+		select
+		s.sname as "sname",
+		c.csstart as "csstart" ,
+		c.csend as "csend"
+		from tblCareService c
+		inner join tblPSReview p on
+		p.csseq =
+		c.csseq
+		inner join tblService s on s.sseq = c.sseq
+		where
+		p.psrseq =
+		#{psrseq}
+	</select>
+
+	<select id="getRPetSiiter" resultType="PetSitterDTO"
+		parameterType="String">
+		select
+		p.psfile as "psfile",
+		p.psname as "psname",
+		p.pscareer as "pscareer" ,
+		p.pslicense as "pslicense"
+		from tblPSReview r
+		inner join tblcareservice cs on
+		cs.csseq = r.csseq
+		inner join
+		tblRegister r on r.rseq = cs.rseq
+		inner
+		join tblPetSitter p on p.psseq =
+		r.psseq
+		where r.psrseq = #{psrseq}
+	</select>
+
+
+	<select id="getCSSeq" resultType="CareServiceDTO"
+		parameterType="String">
+		select * from tblCareService where mseq = #{attribute}
+	</select>
+
+	<insert id="addPSReview" parameterType="PSReviewDTO">
+		insert into tblPSReview
+		values(seqPSReview.nextVal,#{csseq},#{mseq},#{psrtitle},#{psrcontent},default,default,#{psrrate},#{psrfile})
+	</insert>
+
+	<update id="editPSReview" parameterType="PSReviewDTO">
+		update tblpsreview set
+		psrtitle=#{psrtitle},psrcontent=#{psrcontent},psrregdate=default,psrrate=#{psrrate},psrfile=#{psrfile}
+		where psrseq = #{psrseq}
+	</update>
+
+	<update id="viewCount" parameterType="String">
+		update tblPSReview set
+		psrview = psrview + 1 where psrseq = #{psrseq}
+	</update>
+
+	<delete id="psrdeleteok" parameterType="String">
+		delete from tblPSReview
+		where psrseq = #{psrseq}
+	</delete>
+
+	<select id="psreviewsearch" parameterType="String"
+		resultType="PSReviewDTO">
+		select * from tblPSReview where psrtitle like
+		'%'||#{word}||'%' or psrcontent like '%'||#{word}||'%'
+	</select>
+
+	<select id="aCnt" resultType="Integer">
+		select count(*) as "aCnt" from
+		tblAdmin
+	</select>
+
+	<select id="psrCnt" resultType="Integer">
+		select count(*) as "psrCnt" from
+		tblPSReview
+	</select>
+
+	<select id="mCnt" resultType="Integer">
+		select count(*) as "mCnt" from
+		tblMember
+	</select>
+
+	<select id="psCnt" resultType="Integer">
+		select count(*) as "psCnt" from
+		tblPetSitter
+	</select>
+	<!-- 동균 부분 END -->
+
+</mapper>

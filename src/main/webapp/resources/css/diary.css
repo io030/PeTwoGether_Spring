@@ -1,0 +1,94 @@
+#diarybox {
+   border: 2px solid #E7E6E8; 
+   background-color: #F6F5FA; 
+   border-radius: 50px;  
+   display: inline-block; 
+   padding: 30px 20px; 
+   text-align: center; 
+   width: 800px;
+}
+
+h1 {
+   margin: 40px 0;
+   text-align: center;
+}
+
+h1 ~ div {
+   margin: 30px 0;   
+}
+
+
+form span {
+   display: inline-block;
+   width: 110px;
+   margin: 0 30px;
+   color: #7F7F7F;
+   font-size: 1.2rem;
+}
+
+span + span {
+   width: 40px;
+   margin-left: 85px;
+}
+
+input[type=number] {
+   outline: none;
+   width: 120px;
+   padding-left: 20px;
+   border: 0;
+   border: 1px solid #E7E6E8; 
+}
+
+input[type=number] + span {
+   width: 40px;
+}
+
+#etc {
+   height: 300px; 
+   display: inline-block; 
+   margin: 0;
+}
+
+#lb {
+   width: 100px; 
+   height: 300px; 
+   display: flex; 
+   float: left;
+}
+
+#lb1 {
+   margin: 25px 0;
+}
+
+#lb2 {
+   display: flex; 
+   float: left; 
+   width: 400px; 
+   height: 300px;
+}
+
+textarea {
+   padding: 30px;
+   resize: none; 
+   width: 350px; 
+   height: 250px; 
+   margin: 25px auto; 
+   outline: none; 
+   border: 0; 
+   border-radius: 50px;
+}
+
+.btnd {
+   background-color: #FBA1A4; 
+   color: white; 
+   font-size: 1rem; 
+   padding: 10px 20px; 
+   border: 0; 
+   border-radius: 10px;
+   margin: 0 15px;
+}
+
+.btnd:hover {
+   background-color: #FFE8CB;
+   color: black;
+}

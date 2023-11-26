@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- DB Connection 클래스 역할 -->
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName"
+			value="oracle.jdbc.driver.OracleDriver"></property>
+		<!-- DB 주소 , 계정이름 + 비밀먼호 -->
+		<property name="url"
+			value="jdbc:oracle:thin:@localhost:1521:xe"></property>
+		<property name="username" value="petwogether"></property>
+		<property name="password" value="0130"></property>
+	</bean>
+
+
+	<bean id="log4j" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+		<constructor-arg ref="dataSource"></constructor-arg>
+		<property name="logFormatter">
+			<bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+				<property name="loggingType" value="MULTI_LINE"></property>
+				<property name="sqlPrefix" value="[SQL] "></property>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- MyBatis 설정 -->
+	<bean id="sessionfactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="log4j"></property>
+		<!--classpath는 경로 설정 , 패키지명에 맞게 변경 이후 여기에다가 쿼리 작성용 xml 만들기 -->
+		<property name="mapperLocations"
+			value="classpath*:com/test/petwogether/mapper/*.xml"></property>
+		<!-- MyBatis 설정할 xml 위치 지정 및 생성 -->
+		<property name="configLocation" value="/WEB-INF/mybatis.xml"></property>
+	</bean>
+
+	<!-- Statement, ResultSet 클래스 역할 -->
+	<bean class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sessionfactory"></constructor-arg>
+	</bean>
+	
+	<!-- MyBatis > 어노테이션 사용 -->
+	<!-- 매퍼(*.xml)를 대신해서 SQL를 보유할 DAO가 어디있는지? -->
+	<mybatis-spring:scan base-package="com.test.petwogether" />
+		
+		
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+   		<property name="maxUploadSize" value="104857600"></property>
+   </bean>
+   
+   	
+</beans>
